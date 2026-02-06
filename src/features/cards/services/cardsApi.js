@@ -12,3 +12,9 @@ export const getActiveCards = async () => {
 
   return data;
 };
+
+export const deleteCard = async ({ id }) => {
+  const { error } = await supabase.from("cards").delete().eq("id", id);
+
+  if (error) throw error("Could not delete card");
+};

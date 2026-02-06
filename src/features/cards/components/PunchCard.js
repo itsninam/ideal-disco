@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
 import Button from "../../../components/Button";
+import { useDeleteCard } from "../hooks/useDeleteCard";
 
 const PunchCardContext = createContext(null);
 
@@ -17,7 +18,7 @@ function PunchCard({ children, card }) {
     <PunchCardContext.Provider value={{ card }}>
       <li>
         <div className="card-actions">
-          <Remove />
+          <DeleteButton />
         </div>
         {children}
       </li>
@@ -25,9 +26,15 @@ function PunchCard({ children, card }) {
   );
 }
 
-function Remove() {
+function DeleteButton() {
+  const { card } = usePunchCard();
+  const { mutate: deleteCard, isPending } = useDeleteCard();
+
   return (
-    <Button>
+    <Button
+      onHandleClick={() => deleteCard({ id: card.id })}
+      disabled={isPending}
+    >
       <span className="material-symbols-outlined">delete</span>
     </Button>
   );
