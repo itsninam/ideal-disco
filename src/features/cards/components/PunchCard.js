@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import Button from "../../../components/Button";
 import { useDeleteCard } from "../hooks/useDeleteCard";
+import { usePunchCardHole } from "../hooks/usePunchCardHole";
 
 const PunchCardContext = createContext(null);
 
@@ -56,16 +57,29 @@ function Holes() {
   return (
     <div className="btn-container">
       {card.slots.map((slot, index) => (
-        <Hole key={index} />
+        <Hole key={index} slot={slot} index={index} />
       ))}
     </div>
   );
 }
 
-function Hole() {
+function Hole({ slot, index }) {
+  const { card } = usePunchCard();
+  const { mutate: punchCardHole } = usePunchCardHole();
+
+  const punchCard = () => {
+    const updatedCard = card.slots.map((slot, i) =>
+      i === index ? !slot : slot
+    );
+
+    const status = updatedCard.includes(false) ? "active" : "complete";
+
+    punchCardHole({ slots: updatedCard, id: card.id, status: status });
+  };
+
   return (
-    <Button>
-      <span>slot</span>
+    <Button onHandleClick={() => punchCard(index)}>
+      <span>{slot ? "true" : "false"}</span>
     </Button>
   );
 }
