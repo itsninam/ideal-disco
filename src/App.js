@@ -1,10 +1,15 @@
+import { Route, Routes } from "react-router";
 import "./App.css";
-import ActiveCards from "./features/cards/ActiveCards";
+import CardsPage from "./features/CardsPage";
+import CreateCard from "./features/createCard/CreateCard";
 
 function App() {
   return (
     <main>
-      <ActiveCards />
+      <Routes>
+        <Route path="/" element={<CardsPage />} />
+        <Route path="/new" element={<CreateCard />} />
+      </Routes>
     </main>
   );
 }

@@ -4,7 +4,8 @@ export const getActiveCards = async () => {
   let { data, error } = await supabase
     .from("cards")
     .select("*")
-    .eq("status", "active");
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
 
   if (error) throw Error("Could not load cards. Please try again later.");
 
@@ -24,4 +25,10 @@ export const punchCard = async ({ slots, id, status }) => {
     .eq("id", id);
 
   if (error) throw Error("Could not update card. Please try again later");
+};
+
+export const createCard = async (card) => {
+  const { error } = await supabase.from("cards").insert([card]);
+
+  if (error) throw Error(error);
 };
